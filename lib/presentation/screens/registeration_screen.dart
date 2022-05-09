@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:untitled/data/repository/auth_repository.dart';
+import 'package:untitled/presentation/screens/profile_screen.dart';
 
-import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth/auth_bloc.dart';
+
 import '../../main.dart';
 import 'login_screen.dart';
 
@@ -19,11 +22,13 @@ class _signUpScreenState extends State<signUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _usernameController=TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _usernameController.dispose();
     super.dispose();
   }
 
@@ -35,8 +40,11 @@ class _signUpScreenState extends State<signUpScreen> {
         listener: (context, state) {
           if (state is Authenticated) {
 
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (_) => MyHomeBar()));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) =>BlocProvider.value(
+                  value: BlocProvider.of<AuthBloc>(context),
+                  child: ProfileScreen(),
+                )));
 
 
           }
@@ -91,20 +99,52 @@ class _signUpScreenState extends State<signUpScreen> {
                                       : null;
                                 },
                               ),
+                              TextFormField(
+                                controller: _usernameController,
+                                decoration: const InputDecoration(
+                                  hintText: "username",
+                                  border: OutlineInputBorder(),
+                                ),
+                                autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                                validator: (value) {
+                                  return value == null
+                                      ? 'this username is already used'
+                                      : null;
+                                },
+                              ),
                               const SizedBox(
                                 height: 10,
                               ),
                               TextFormField(
                                 controller: _passwordController,
+                                obscureText:true,
                                 decoration: const InputDecoration(
                                   hintText: "Password",
                                   border: OutlineInputBorder(),
+
                                 ),
                                 autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                                 validator: (value) {
                                   return value != null && value.length < 6
                                       ? "Enter min. 6 characters"
+                                      : null;
+
+                                },
+
+                              ),
+                              TextFormField(
+                                obscureText:true,
+                                decoration: const InputDecoration(
+                                  hintText: "confirm-Password",
+                                  border: OutlineInputBorder(),
+                                ),
+                                autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                                validator: (value) {
+                                  return  value!= _passwordController.text
+                                      ? "please make sure both passwords match"
                                       : null;
                                 },
                               ),
@@ -128,11 +168,10 @@ class _signUpScreenState extends State<signUpScreen> {
                       TextButton(
                           child:Text("Already have an account?"),
                           onPressed:() {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => loginScreen()),
-                            );
+                            Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (_) =>
+                                  loginScreen()));
+
                           }),
 
                     ],
@@ -147,12 +186,14 @@ class _signUpScreenState extends State<signUpScreen> {
     );
   }
 
+
   void _createAccountWithEmailAndPassword(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       BlocProvider.of<AuthBloc>(context).add(
         SignUpRequested(
           _emailController.text,
           _passwordController.text,
+          _usernameController.text,
         ),
       );
     }

@@ -4,9 +4,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:untitled/bloc/auth_bloc.dart';
+import 'package:untitled/presentation/screens/profile_screen.dart';
+
 import 'package:untitled/presentation/screens/registeration_screen.dart';
 
+import '../../bloc/auth/auth_bloc.dart';
+import '../../data/repository/auth_repository.dart';
 import '../../main.dart';
 
 class loginScreen extends StatefulWidget {
@@ -25,6 +28,7 @@ class _loginScreenState extends State<loginScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+
     super.dispose();
   }
 
@@ -35,8 +39,14 @@ class _loginScreenState extends State<loginScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (_) => MyHomeBar()));
+            /*Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => MyHomeBar()));*/
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) =>BlocProvider.value(
+                  value: BlocProvider.of<AuthBloc>(context),
+                  child: ProfileScreen(),
+
+                )));
           }
           if (state is AuthError) {
             ScaffoldMessenger.of(context)

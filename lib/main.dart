@@ -3,11 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:untitled/bloc/profile_bloc.dart';
 import 'package:untitled/presentation/screens/login_screen.dart';
 import 'package:untitled/presentation/screens/profile_screen.dart';
 import 'package:untitled/presentation/screens/search_screen.dart';
 import 'package:untitled/presentation/screens/timeLine_screen.dart';
-import 'bloc/auth_bloc.dart';
+import 'bloc/auth/auth_bloc.dart';
+import 'bloc/profile_bloc.dart';
 import 'data/repository/auth_repository.dart';
 import 'presentation/router/app_router.dart';
 
@@ -28,9 +30,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider(
       create: (context) => AuthRepository(),
-      child: BlocProvider(
-        create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context),
-      ),
+      child:/* MultiBlocProvider(
+        providers: [*/BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context),),
+
+  // BlocProvider<ProfileBloc>(create: (_) => ProfileBloc(authRepository: RepositoryProvider.of<AuthRepository>(context),),)
+
+
+    //],
+
+
         child: MaterialApp(
 
           home: loginScreen(), //MyHomePage(),

@@ -1,9 +1,11 @@
 //import 'dart:html';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:untitled/bloc/auth/auth_bloc.dart';
+import '../../data/repository/auth_repository.dart';
 
 class ProfileScreen extends StatefulWidget {
 
@@ -17,12 +19,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final String title = 'israaezzat';
   File ProfileImage=File('');
   String imagePath='';
-
-
-  @override
+ @override
   Widget build(BuildContext context) {
+    final _authBloc=BlocProvider.of<AuthBloc>(context);
+    final posts_number=  _authBloc.current_user.posts==null?0: _authBloc.current_user.posts?.length;
+    final followers_number=  _authBloc.current_user.followers==null?0: _authBloc.current_user.followers?.length;
+    final following_number=  _authBloc.current_user.following==null?0: _authBloc.current_user.following?.length;
 
     return  Scaffold(
+
+
+
+
+
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.settings),
@@ -31,12 +40,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
         centerTitle: true,
-        title: Text(title,),
+        title: Text(_authBloc.current_user.username),
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
 
       ),
-
       body:Column(children:<Widget>[
       Row(children:<Widget>[
 
@@ -50,12 +58,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onPressed: () {
             getImage(source: ImageSource.camera);
           },),
+        Container(
+          child: Column(
+            children: [
+              TextButton(
+                  child:Text(posts_number.toString()
+                  ),
+                  onPressed:() {
+                  }),
 
-        Text('posts',),
-        SizedBox(width: 20,),
-        Text('followers',),
-        SizedBox(width: 20,),
-        Text('following',),
+              Text('posts',),
+
+            ],
+          ),
+        ),
+
+        SizedBox(width: 15,),
+        Container(
+          child: Column(
+            children: [
+              TextButton(
+                  child:Text(followers_number.toString()
+                  ),
+                  onPressed:() {
+                  }),
+
+              Text('followers',),
+
+            ],
+          ),
+        ),
+
+        SizedBox(width: 15,),
+        Container(
+          child: Column(
+            children: [
+              TextButton(
+                  child:Text(following_number.toString()
+                  ),
+                  onPressed:() {
+                  }),
+
+              Text('following',),
+
+            ],
+          ),
+        ),
+
 
       ]
     ),

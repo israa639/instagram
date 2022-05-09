@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 class post{
-  String imgId;
-
-
+ final String imgId;
+  final DateTime publish_date;
   String imgURL;
-  String description;
-  late var comments=new Map();
-  var likers=[];
+  String? caption;
+  List<dynamic>? comments;
+ List<dynamic>? likers;
 
 
-  post({required this.imgId,required this.imgURL,required this.description});
+  post({required this.imgId,required this.publish_date,required this.imgURL, this.caption});
 
 
 

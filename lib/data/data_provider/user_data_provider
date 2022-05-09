@@ -14,53 +14,10 @@ class UserEntity extends Equatable {
 
   UserEntity({required this.username,required this.followers,required this.following,required this.profile_img_url,required this.posts,required this.other_posts,required this.password,required this.mail,required this.user_id});
 
-  Map<String, Object> toJson() {
-
-    return {
-
-    "username" : username,
-
-   "password": password,
-
-   "mail": mail,
-
-    "userId":user_id,
-    "profileURL":profile_img_url,
-    "followers":followers,
-      "following":following,
-      "posts":posts,
-      "other_posts"=other_posts,
 
 
-  };
-
-  }
 
 
-  /*@override
-
-  String toString() {
-
-    return ‘UserEntity { complete: $complete, task: $task, note: $note, id: $id }’;
-
-  }*/
-
-
-  static UserEntity fromJson(Map<String, Object> json) {
-
-    return UserEntity(
-      json["username"] as String,
-      json["followers"] as array,
-      json["following"] as array,
-      json["profileURL"] as String,
-      json["posts"] as array,
-      json[ "other_posts"] as array,
-      json["password"] as array,
-      json["mail"] as array,
-      json["userId"] as String,
-
-    );
-  }
   static UserEntity fromSnapshot(DocumentSnapshot snap) {
 
     return UserEntity(
