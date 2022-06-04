@@ -50,5 +50,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await authRepository.signOut();
       emit(UnAuthenticated());
     });
+
+  }
+  @override
+  void onTransition(Transition<AuthEvent, AuthState> transition) {
+    print(transition);
+    super.onTransition(transition);
   }
 }

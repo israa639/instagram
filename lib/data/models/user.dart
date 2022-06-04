@@ -10,17 +10,15 @@ import 'package:untitled/data/models/post.dart';
    String? name;
    Future<String>? profile_img_downloaded_url;
 
-    String? profile_img_url;
-  List<Object>?followers;//array to store user followers
-
-
-   List<Object>?following=[];//array to store  followings of user
-   List<Object>? posts=[];// array to store posts
-   List<Object>? other_posts=[];//array to stores the posts that user was tagged in
+   String? profile_img_url;
+   List<Object>?followers_id;//array to store user followers
+   List<Object>?following_id=[];//array to store  followings of user
+   List<Object>? posts_id=[];// array to store posts
+   List<Object>? other_posts_id=[];//array to stores the posts that user was tagged in
    String? userId;
+   List<post>?posts;
 
-
-  user({required this.username, this.followers, this.following, this.profile_img_url, this.posts, this.other_posts, this.userId,this.name});
+  user({required this.username, this.followers_id, this.following_id, this.profile_img_url, this.posts_id, this.other_posts_id, this.userId,this.name});
    //user({required this.username,  this.userId,this.name});
   void set_profile_img_url(String url)
   {
@@ -35,10 +33,10 @@ import 'package:untitled/data/models/post.dart';
        "name":name,
        "userId":userId,
        "profileURL":profile_img_url,
-       "followers":followers,
-       "following":following,
-       "posts":posts,
-       "other_posts":other_posts,
+       "followers":followers_id,
+       "following":following_id,
+       "posts":posts_id,
+       "other_posts":other_posts_id,
      };
 
    }
@@ -46,11 +44,11 @@ import 'package:untitled/data/models/post.dart';
    factory user.fromSnapshot( DocumentSnapshot<Map<String, dynamic>> snap) {
      return user(
       username: snap["username"] ,
-      followers:snap["followers"]!=null?List<Object>.from(snap["followers"]): [],
-      following: snap["following"]!=null?List<Object>.from(snap["following"]):[],
+      followers_id:snap["followers"]!=null?List<Object>.from(snap["followers"]): [],
+      following_id: snap["following"]!=null?List<Object>.from(snap["following"]):[],
       profile_img_url: snap["profileURL"]==null?'':snap["profileURL"],
-       posts:snap["posts"]!=null?List<Object>.from(snap["posts"]):[],
-      other_posts:snap["other_posts"]!=null? List<Object>.from(snap["other_posts"]):[],
+       posts_id:snap["posts"]!=null?List<Object>.from(snap["posts"]):[],
+      other_posts_id:snap["other_posts"]!=null? List<Object>.from(snap["other_posts"]):[],
 
        userId:snap["userId"],
        name: snap["name"]==null?'':snap["name"],

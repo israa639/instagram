@@ -12,26 +12,15 @@ class AuthRepository{
   late   user   current_user;
   Future<bool> checkUserNameexistence(String username)async
   {
-
-    /* DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-    await _firestore.collection('username').doc(username ?? '').get();*/
     final documentSnapshot =
     await _firestore.collection('user').where('username',isEqualTo:username).get();
-
-
     if(documentSnapshot.size>0)
     {
-
       return true;
-
     }
-
     return false;
-
   }
   Future<void> signUp({required String email, required String password,required String username,required String name}) async {
-
-
 
     if(await checkUserNameexistence(username)==false) {
       try {
@@ -148,8 +137,6 @@ Future<void> updateProfileImg(File File_image) async {
  catch(e){
    throw Exception(e.toString());
  }
-  // Waits till the file is uploaded then stores the download url
-  //Uri location = (await uploadTask.future).downloadUrl;
 
 }
 

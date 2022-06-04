@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../data/models/post.dart';
 import '../../data/models/user.dart';
 import '../../data/repository/auth_repository.dart';
 
@@ -45,14 +46,14 @@ class BottomNavBarBloc extends Bloc<BottomNavBarEvent, BottomNavBarState> {
       catch(e){
         emit(PageLoadedError(e.toString()));
       }}
-      if(this.current_index==3)
+      if(this.current_index==2)
       {try {
         emit(AddPostPageLoaded());
       }
       catch(e){
         emit(PageLoadedError(e.toString()));
       }}
-      if(this.current_index==2)
+      if(this.current_index==3)
       {try {
         emit(ProfilePageLoaded(current_user: this.authRepository.current_user));
       }
@@ -60,5 +61,10 @@ class BottomNavBarBloc extends Bloc<BottomNavBarEvent, BottomNavBarState> {
         emit(PageLoadedError(e.toString()));
       }}
     });
+  }
+  @override
+  void onTransition(Transition<BottomNavBarEvent, BottomNavBarState> transition) {
+    print(transition);
+    super.onTransition(transition);
   }
 }

@@ -25,8 +25,8 @@ class _users_ProfileScreenState extends State<users_ProfileScreen> {
   Widget build(BuildContext context) {
     final _bottom_nav_Bloc=BlocProvider.of<BottomNavBarBloc>(context);
     final posts_number=  _bottom_nav_Bloc.authRepository.current_user.posts==null?0: _bottom_nav_Bloc.authRepository.current_user.posts?.length;
-    final followers_number=  _bottom_nav_Bloc.authRepository.current_user.followers==null?0:_bottom_nav_Bloc.authRepository.current_user.followers?.length;
-    final following_number=  _bottom_nav_Bloc.authRepository.current_user.following==null?0: _bottom_nav_Bloc.authRepository.current_user.following?.length;
+    final followers_number=  _bottom_nav_Bloc.authRepository.current_user.followers_id==null?0:_bottom_nav_Bloc.authRepository.current_user.followers_id?.length;
+    final following_number=  _bottom_nav_Bloc.authRepository.current_user.following_id==null?0: _bottom_nav_Bloc.authRepository.current_user.following_id?.length;
 
     return  Scaffold(
 

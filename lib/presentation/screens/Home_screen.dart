@@ -26,7 +26,7 @@ class _MyHomeBarState extends State<MyHomeBar> {
       IconData icon1) {
     return BottomNavigationBarItem(
       icon: Icon(icon1),
-      label: Btnlabel,
+     // label: Btnlabel,
     );
   }
 
@@ -62,6 +62,10 @@ class _MyHomeBarState extends State<MyHomeBar> {
               items: <BottomNavigationBarItem>[
                 makeNavigationButton('home', Icons.home),
                 makeNavigationButton('search', Icons.search),
+                makeNavigationButton('', Icons.add_box_outlined),
+                makeNavigationButton('search', Icons.monitor_heart),
+
+
                 makeNavigationButton('profile', Icons.person),
               ],
 

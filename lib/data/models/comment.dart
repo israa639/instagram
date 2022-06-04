@@ -1,10 +1,10 @@
 class comment{
 
 
-  String postId;
+  String commentId;
   String commentText;
   String userId;
   final DateTime commentDate;
 
-  comment(this.commentDate,this.commentText,this.postId,this.userId);
+  comment(this.commentDate,this.commentText,this.commentId,this.userId);
 }
