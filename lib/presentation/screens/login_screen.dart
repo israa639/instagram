@@ -7,10 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/presentation/screens/profile_screen.dart';
 
 import 'package:untitled/presentation/screens/registeration_screen.dart';
+import 'package:untitled/presentation/screens/timeLine_screen.dart';
 
 import '../../bloc/auth/auth_bloc.dart';
+import '../../bloc/bottom_nav_bar/bottom_nav_bar_bloc.dart';
 import '../../data/repository/auth_repository.dart';
 import '../../main.dart';
+import 'Home_screen.dart';
 
 class loginScreen extends StatefulWidget {
 
@@ -39,13 +42,17 @@ class _loginScreenState extends State<loginScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {
-            /*Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (_) => MyHomeBar()));*/
+           /*
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) =>BlocProvider.value(
                   value: BlocProvider.of<AuthBloc>(context),
-                  child: ProfileScreen(),
+                  child: HomeScreen(),
 
+                )));*/
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) =>BlocProvider.value(
+                  value: BlocProvider.of<BottomNavBarBloc>(context),
+                  child:  MyHomeBar(),
                 )));
           }
           if (state is AuthError) {

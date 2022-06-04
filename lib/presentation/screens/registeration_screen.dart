@@ -6,10 +6,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/data/repository/auth_repository.dart';
 import 'package:untitled/presentation/screens/profile_screen.dart';
-
+import 'package:untitled/presentation/screens/timeLine_screen.dart';
+import 'package:untitled/presentation/screens/timeLine_screen.dart';
 import '../../bloc/auth/auth_bloc.dart';
-
+import '../../bloc/bottom_nav_bar/bottom_nav_bar_bloc.dart';
 import '../../main.dart';
+import 'Home_screen.dart';
 import 'login_screen.dart';
 
 class signUpScreen extends StatefulWidget {
@@ -23,12 +25,15 @@ class _signUpScreenState extends State<signUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _usernameController=TextEditingController();
+  final _nameController=TextEditingController();
+
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _usernameController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
@@ -42,8 +47,8 @@ class _signUpScreenState extends State<signUpScreen> {
 
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) =>BlocProvider.value(
-                  value: BlocProvider.of<AuthBloc>(context),
-                  child: ProfileScreen(),
+                  value: BlocProvider.of<BottomNavBarBloc>(context),
+                  child:  MyHomeBar(),
                 )));
 
 
@@ -113,6 +118,20 @@ class _signUpScreenState extends State<signUpScreen> {
                                       : null;
                                 },
                               ),
+                              TextFormField(
+                                controller: _nameController,
+                                decoration: const InputDecoration(
+                                  hintText: "full-name",
+                                  border: OutlineInputBorder(),
+                                ),
+                                autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                                validator: (value) {
+                                  return value == null
+                                      ? 'Enter a valid name'
+                                      : null;
+                                },
+                              ),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -143,7 +162,7 @@ class _signUpScreenState extends State<signUpScreen> {
                                 autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                                 validator: (value) {
-                                  return  value!= _passwordController.text
+                                  return  value!= _passwordController.text ||value==null
                                       ? "please make sure both passwords match"
                                       : null;
                                 },
@@ -194,6 +213,7 @@ class _signUpScreenState extends State<signUpScreen> {
           _emailController.text,
           _passwordController.text,
           _usernameController.text,
+          _nameController.text,
         ),
       );
     }

@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 
 import '../../data/models/user.dart';
 import '../../data/repository/auth_repository.dart';
+import '../../data/repository/user_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
+  final UserRepository user_repository;
   late final user current_user;
-  AuthBloc({required this.authRepository}) : super(UnAuthenticated()) {
+  AuthBloc({required this.authRepository,required this.user_repository}) : super(UnAuthenticated()) {
 
     on<SignInRequested>((event, emit) async {
 
@@ -22,6 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await authRepository.signIn(
             email: event.email, password: event.password);
         current_user=this.authRepository.current_user;
+
         emit(Authenticated());
       } catch (e) {
         emit(AuthError(e.toString()));
@@ -32,8 +35,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(Loading());
       try {
+
         await authRepository.signUp(
-            email: event.email, password: event.password,username: event.username);
+            email: event.email, password: event.password,username: event.username,name:event.name);
         current_user=this.authRepository.current_user;
         emit(Authenticated());
       } catch (e) {

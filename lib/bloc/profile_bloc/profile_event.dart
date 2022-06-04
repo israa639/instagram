@@ -1,23 +1,15 @@
 part of 'profile_bloc.dart';
-
 abstract class ProfileEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
  class showFollowers extends ProfileEvent{
-
   List<dynamic> followers;
-
   showFollowers(this.followers);
-
-
 }
 class showFollowing extends ProfileEvent{
-
   List<dynamic> following;
-
   showFollowing(this.following);
-
 }
 class updateProfile extends ProfileEvent{
 

@@ -1,70 +1,81 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:untitled/data/models/user.dart';
 
 class AuthRepository{
   final _firebaseAuth = FirebaseAuth.instance;
-final _firestore=FirebaseFirestore.instance;
+  final _firestore=FirebaseFirestore.instance;
   late   user   current_user;
-  Future<void> signUp({required String email, required String password,required String username}) async {
-    if(checkUserNameexistence(username)==false) {
-    checkUserNameexistence(username);
-    try {
+  Future<bool> checkUserNameexistence(String username)async
+  {
+
+    /* DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+    await _firestore.collection('username').doc(username ?? '').get();*/
+    final documentSnapshot =
+    await _firestore.collection('user').where('username',isEqualTo:username).get();
+
+
+    if(documentSnapshot.size>0)
+    {
+
+      return true;
+
+    }
+
+    return false;
+
+  }
+  Future<void> signUp({required String email, required String password,required String username,required String name}) async {
+
+
+
+    if(await checkUserNameexistence(username)==false) {
+      try {
 
 
         UserCredential result = await _firebaseAuth
             .createUserWithEmailAndPassword(email: email, password: password);
-        user? new_user=user(userId:result.user?.uid,username:username);
+        user? new_user=user(userId:result.user?.uid,username:username,name: name);
 
         createUser(new_user);
         this.current_user=new_user;
 
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        throw Exception('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        throw Exception('The account already exists for that email.');
-      }
-    } catch (e) {
-      throw Exception(e.toString());
-    }}
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          throw Exception('The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          throw Exception('The account already exists for that email.');
+        }
+      } catch (e) {
+        throw Exception(e.toString());
+      }}
     else{
-      throw Exception(username );
+      throw Exception("this username is already used" );
     }
   }
   //function to check if the username is unique or not
- Future<bool> checkUserNameexistence(String username)async
-  {
 
-      DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-      await _firestore.collection('username').doc(username ?? '').get();
-      if(documentSnapshot.exists)
-      {
-
-        return true;
-
-      }
-
-      return false;
-
-  }
   Future<void> createUser(user new_user)async
   {
     try{
 
-    await _firestore
-        .collection("user")
-        .doc(new_user.userId)
-        .set(new_user.toDocument());
-    await _firestore
-        .collection("username")
-        .doc(new_user.username)
-        .set({"user_name":new_user.username});
+      await _firestore
+          .collection("user")
+          .doc(new_user.userId)
+          .set(new_user.toDocument());
+      await _firestore
+          .collection("username")
+          .doc(new_user.username)
+          .set({"user_name":new_user.username});
 
     }
-        catch(e){
-          throw Exception(e.toString());
-        }
+    catch(e){
+      throw Exception(e.toString());
+    }
 
   }
 
@@ -102,5 +113,44 @@ final _firestore=FirebaseFirestore.instance;
     }
   }
 
+   Future<String> loadImage(String img_url1)async {
+
+    try{
+      final String url= await FirebaseStorage.instance.ref("/profile_images").child(img_url1).getDownloadURL();
+      return url;
+    }
+    catch(e){
+      throw Exception(e.toString());
+    }
+
+  }
+  Future<void> delete_user(String user_id) async {
+
+    try{
+      await _firestore
+          .collection("user")
+          .doc(user_id)
+          .delete();
+    }
+    catch(e){
+      throw Exception(e.toString());
+    }
+
+
+  }
+
+Future<void> updateProfileImg(File File_image) async {
+ try {
+   final reference = await FirebaseStorage.instance.ref().child("profile_images/${this.current_user.username}");
+   //Upload the file to firebase
+   final uploadTask = reference.putFile(File_image);
+ }
+ catch(e){
+   throw Exception(e.toString());
+ }
+  // Waits till the file is uploaded then stores the download url
+  //Uri location = (await uploadTask.future).downloadUrl;
+
+}
 
 }
