@@ -24,6 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await authRepository.signIn(
             email: event.email, password: event.password);
         current_user=this.authRepository.current_user;
+        current_user.set_postNumber();
 
         emit(Authenticated());
       } catch (e) {
@@ -39,6 +40,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await authRepository.signUp(
             email: event.email, password: event.password,username: event.username,name:event.name);
         current_user=this.authRepository.current_user;
+        current_user.set_postNumber();
         emit(Authenticated());
       } catch (e) {
         emit(AuthError(e.toString()));

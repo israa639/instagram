@@ -60,6 +60,13 @@ class BottomNavBarBloc extends Bloc<BottomNavBarEvent, BottomNavBarState> {
       catch(e){
         emit(PageLoadedError(e.toString()));
       }}
+      if(this.current_index==4)
+      {try {
+        emit(ProfilePageLoaded(current_user: this.authRepository.current_user));
+      }
+      catch(e){
+        emit(PageLoadedError(e.toString()));
+      }}
     });
   }
   @override

@@ -17,6 +17,7 @@ import 'package:untitled/data/models/post.dart';
    List<Object>? other_posts_id=[];//array to stores the posts that user was tagged in
    String? userId;
    List<post>?posts;
+   late final int postNumber;
 
   user({required this.username, this.followers_id, this.following_id, this.profile_img_url, this.posts_id, this.other_posts_id, this.userId,this.name});
    //user({required this.username,  this.userId,this.name});
@@ -24,7 +25,10 @@ import 'package:untitled/data/models/post.dart';
   {
     this.profile_img_url=url;
   }
-
+   void set_postNumber()
+   {
+     this.postNumber=posts!=null?posts!.length:0;
+   }
    Map<String, dynamic> toDocument() {
 
      return {

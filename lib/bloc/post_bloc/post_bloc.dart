@@ -15,7 +15,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   String userName;
   int postNo;
 
-  PostBloc(this.postRepo,this.userName,this.postNo) : super(InitialPostState()) {
+  PostBloc({required this.postRepo,required this.userName,required this.postNo}) : super(InitialPostState()) {
     on<addPostEvent>((event, emit) {
      emit(Loading());
      try {

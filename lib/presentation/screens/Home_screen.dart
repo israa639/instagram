@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:untitled/bloc/profile_bloc/profile_bloc.dart';
 import 'package:untitled/presentation/screens/login_screen.dart';
 import 'package:untitled/presentation/screens/profile_screen.dart';
@@ -10,6 +13,8 @@ import 'package:untitled/presentation/screens/search_screen.dart';
 import 'package:untitled/presentation/screens/timeLine_screen.dart';
 
 import '../../bloc/bottom_nav_bar/bottom_nav_bar_bloc.dart';
+import '../../bloc/post_bloc/post_bloc.dart';
+import 'add_post_screen.dart';
 
 
 class MyHomeBar extends StatefulWidget {
@@ -22,14 +27,14 @@ class MyHomeBar extends StatefulWidget {
 class _MyHomeBarState extends State<MyHomeBar> {
 
 
-  BottomNavigationBarItem makeNavigationButton(String Btnlabel,
-      IconData icon1) {
+  BottomNavigationBarItem makeNavigationButton(String Btnlabel,IconData icon1 ) {
     return BottomNavigationBarItem(
       icon: Icon(icon1),
-     // label: Btnlabel,
+
+      label: Btnlabel,
     );
   }
-
+  late var imageFile;
   @override
   Widget build(BuildContext context) {
     final bottomNavigationBloc = BlocProvider.of<BottomNavBarBloc>(context);
@@ -51,6 +56,12 @@ class _MyHomeBarState extends State<MyHomeBar> {
             if (state is SearchPageLoaded) {
               return searchScreen();
             }
+            if ( state is AddPostPageLoaded) {
+
+              return addPostScreen(imageFile);
+
+
+            }
             return Container();
           }
       ),
@@ -58,24 +69,35 @@ class _MyHomeBarState extends State<MyHomeBar> {
           bloc: bottomNavigationBloc,
           builder: (BuildContext context, BottomNavBarState state) {
             return BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
               currentIndex: bottomNavigationBloc.current_index,
               items: <BottomNavigationBarItem>[
                 makeNavigationButton('home', Icons.home),
                 makeNavigationButton('search', Icons.search),
-                makeNavigationButton('', Icons.add_box_outlined),
-                makeNavigationButton('search', Icons.monitor_heart),
-
-
+                makeNavigationButton('add post', Icons.add_box_outlined),
+                makeNavigationButton('favourite', Icons.heart_broken_outlined),
                 makeNavigationButton('profile', Icons.person),
               ],
 
-              onTap: (index) =>
-                  bottomNavigationBloc.add(PageTapped(index: index,
-                      current_user: bottomNavigationBloc.authRepository
-                          .current_user)),
+              onTap: (index) {
+                if(index==2)
+                {getImage(source: ImageSource.camera);}
+                bottomNavigationBloc.add(PageTapped(index: index,
+                    current_user: bottomNavigationBloc.authRepository
+                        .current_user));
+              }
+
             );
           }
       ),
     );
   }
-}
+
+  void getImage({required ImageSource source} )async{
+    final file=await ImagePicker().pickImage(source: source);
+         setState(()=>imageFile=File(file!.path));
+   /* if(file?.path!=null){
+      BlocProvider.of<PostBloc>(context).add(addPostEvent(File(file!.path)));*/
+
+    }
+  }
