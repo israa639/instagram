@@ -7,7 +7,7 @@ import 'package:untitled/data/models/post.dart';
  class user{
    String username;
    //String password;
-   String? name;
+  final String name;
    Future<String>? profile_img_downloaded_url;
 
    String? profile_img_url;
@@ -19,7 +19,7 @@ import 'package:untitled/data/models/post.dart';
    List<post>?posts;
    late final int postNumber;
 
-  user({required this.username, this.followers_id, this.following_id, this.profile_img_url, this.posts_id, this.other_posts_id, this.userId,this.name});
+  user({required this.username, this.followers_id, this.following_id, this.profile_img_url, this.posts_id, this.other_posts_id, this.userId,required this.name});
    //user({required this.username,  this.userId,this.name});
   void set_profile_img_url(String url)
   {

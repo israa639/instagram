@@ -15,17 +15,22 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   String userName;
   int postNo;
 
-  PostBloc({required this.postRepo,required this.userName,required this.postNo}) : super(InitialPostState()) {
+  PostBloc({required this.postRepo,required this.userName,required this.postNo}) : super( ImageSelected()) {
+    //emit(ImageSelected());
     on<addPostEvent>((event, emit) {
+
      emit(Loading());
      try {
        postRepo.AddPost(
-           event.newPost, event.File_image, this.userName, this.postNo);
-       emit(PostAddedSuccessfully(event.newPost,event.File_image));
+           event.caption, event.File_image, this.userName, this.postNo);
+       emit(PostAddedSuccessfully(event.caption,event.File_image));
      }
      catch(e){
-
+emit(PostAddedFailed(e.toString()));
      }
+    });
+    on<postAddedFinished>((event, emit) {
+
     });
     on<deletePostEvent>((event, emit) {
 

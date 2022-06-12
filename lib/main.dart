@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<BottomNavBarBloc>(create: (context) => BottomNavBarBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))),
           BlocProvider<SearchUsersBloc>(create: (context) => SearchUsersBloc( userRepository: RepositoryProvider.of<UserRepository>(context))),
           BlocProvider<ProfileImageBloc>(create: (context) =>ProfileImageBloc(authRepository: RepositoryProvider.of<AuthRepository>(context),current_user: RepositoryProvider.of<AuthRepository>(context).current_user)),
-   BlocProvider<PostBloc>(create: (_) => PostBloc(postRepo: RepositoryProvider.of<PostRepository>(context),userName:RepositoryProvider.of<AuthRepository>(context).current_user.username,postNo:RepositoryProvider.of<AuthRepository>(context).current_user.postNumber))
+   BlocProvider<PostBloc>(create: (context) => PostBloc(postRepo: RepositoryProvider.of<PostRepository>(context),userName:RepositoryProvider.of<AuthRepository>(context).current_user.username,postNo:RepositoryProvider.of<AuthRepository>(context).current_user.postNumber))
 
 
     ],

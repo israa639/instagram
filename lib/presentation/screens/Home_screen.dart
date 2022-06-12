@@ -27,14 +27,17 @@ class MyHomeBar extends StatefulWidget {
 class _MyHomeBarState extends State<MyHomeBar> {
 
 
-  BottomNavigationBarItem makeNavigationButton(String Btnlabel,IconData icon1 ) {
+  BottomNavigationBarItem makeNavigationButton(String Btnlabel,
+      IconData icon1) {
     return BottomNavigationBarItem(
       icon: Icon(icon1),
 
       label: Btnlabel,
     );
   }
-  late var imageFile;
+
+  late File imageFile;
+
   @override
   Widget build(BuildContext context) {
     final bottomNavigationBloc = BlocProvider.of<BottomNavBarBloc>(context);
@@ -56,11 +59,12 @@ class _MyHomeBarState extends State<MyHomeBar> {
             if (state is SearchPageLoaded) {
               return searchScreen();
             }
-            if ( state is AddPostPageLoaded) {
-
+            if (state is AddPostPageLoaded) {
               return addPostScreen(imageFile);
-
-
+              /* Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>addPostScreen(imageFile)),
+              );*/
             }
             return Container();
           }
@@ -70,22 +74,26 @@ class _MyHomeBarState extends State<MyHomeBar> {
           builder: (BuildContext context, BottomNavBarState state) {
             return BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
-              currentIndex: bottomNavigationBloc.current_index,
-              items: <BottomNavigationBarItem>[
-                makeNavigationButton('home', Icons.home),
-                makeNavigationButton('search', Icons.search),
-                makeNavigationButton('add post', Icons.add_box_outlined),
-                makeNavigationButton('favourite', Icons.heart_broken_outlined),
-                makeNavigationButton('profile', Icons.person),
-              ],
+                currentIndex: bottomNavigationBloc.current_index,
+                items: <BottomNavigationBarItem>[
+                  makeNavigationButton('home', Icons.home),
+                  makeNavigationButton('search', Icons.search),
+                  makeNavigationButton('add post', Icons.add_box_outlined),
+                  makeNavigationButton(
+                      'favourite', Icons.heart_broken_outlined),
+                  makeNavigationButton('profile', Icons.person),
+                ],
 
-              onTap: (index) {
-                if(index==2)
-                {getImage(source: ImageSource.camera);}
-                bottomNavigationBloc.add(PageTapped(index: index,
-                    current_user: bottomNavigationBloc.authRepository
-                        .current_user));
-              }
+                onTap: (index) {
+                  if (index == 2) {
+                    getImage(source: ImageSource.camera,);
+                    // setState(()=>index=4);
+                  }
+                  bottomNavigationBloc.add(PageTapped(index: index,
+                      current_user: bottomNavigationBloc.authRepository
+                          .current_user));
+                }
+
 
             );
           }
@@ -93,11 +101,15 @@ class _MyHomeBarState extends State<MyHomeBar> {
     );
   }
 
-  void getImage({required ImageSource source} )async{
-    final file=await ImagePicker().pickImage(source: source);
-         setState(()=>imageFile=File(file!.path));
-   /* if(file?.path!=null){
-      BlocProvider.of<PostBloc>(context).add(addPostEvent(File(file!.path)));*/
+  void getImage({required ImageSource source}) async {
+    final file = await ImagePicker().pickImage(source: source);
+    setState(() => imageFile = File(file!.path));
+    /* if(file?.path!=null){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) =>addPostScreen(imageFile)),
+      );
+    }*/
 
-    }
   }
+}

@@ -50,7 +50,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body:Column(children:<Widget>[
           Row(children:<Widget>[
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  getImage(source: ImageSource.camera);
+                },
             child:BlocBuilder< ProfileImageBloc, ProfileImageState>(
    bloc:_profileImg_bloc,
    builder: (BuildContext context, ProfileImageState state) {
@@ -68,8 +70,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                  backgroundImage: NetworkImage("${snapshot.data.toString()}"),
                );}
 
-             }return CircleAvatar(radius:60,
-               backgroundColor: Colors.grey,);
+             }return InkWell( onTap: (){
+               getImage(source: ImageSource.camera);
+             },
+             child:CircleAvatar(radius:60,
+               backgroundColor: Colors.grey,));
 
            });
      }
@@ -77,13 +82,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context)
        .showSnackBar(SnackBar(content: Text(state.error)));
 
+      return  InkWell( onTap: (){
+        getImage(source: ImageSource.camera);
+      },
+          child:CircleAvatar(radius:60,
+            backgroundColor: Colors.grey,));
 
-
-
-
-
-      return CircleAvatar(radius:60,
-       backgroundColor: Colors.grey.shade400,);
    }
    if (state is ProfileImageUpdatedSuccessfully) {
    return CircleAvatar(radius:60,
@@ -95,13 +99,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
    }),),
 
-            SizedBox(width: 1,),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                getImage(source: ImageSource.camera);
-              },),
-            SizedBox(width: 3,),
+            SizedBox(width:MediaQuery.of(context).size.width * 0.15,),
+
+
       Container(
 
           alignment: Alignment.center,
@@ -124,7 +124,7 @@ children:<Widget> [
 SizedBox(width: 20,),
           Container(
   alignment: Alignment.centerLeft,
-  child:Text(_bottom_nav_Bloc.authRepository.current_user.username,style: TextStyle(fontSize: 25),),
+  child:Text(_bottom_nav_Bloc.authRepository.current_user.name,style: TextStyle(fontSize: 25),),
 
 ),],),
           Divider(

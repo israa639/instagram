@@ -22,7 +22,7 @@ class post{
    "comments":comments,
    "imgURL":profile_img_url,
    "likers":likers,
-   "publish_date":publish_date,
+   "publish_date":Timestamp.fromDate(publish_date),
 
   };
 

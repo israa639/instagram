@@ -8,22 +8,26 @@ class Loading extends PostState {
   @override
   List<Object> get props => [];
 }
-class InitialPostState extends PostState {
+class ImageSelected extends PostState {
 
   @override
   List<Object> get props => [];
 }
 class PostAddedSuccessfully extends PostState {
-  post newpost;
+  String postCaption;
   final File profile_img;
 
 
-  PostAddedSuccessfully(this.newpost,this.profile_img);
+  PostAddedSuccessfully(this.postCaption,this.profile_img);
 
   @override
   List<Object> get props => [];
 }
 class PostAddedFailed extends PostState {
+  String error;
+
+  PostAddedFailed(this.error);
+
   @override
   List<Object> get props => [];
 }
