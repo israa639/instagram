@@ -22,17 +22,18 @@ class PostRepository{
 
   }
 
-  Future<void>AddPost(String postCaption,File File_image,String userName,int postNo)
+  Future<String>AddPost(String postCaption,File? File_image,String userName,int postNo)
   async {
     try {
-      post newPost=post(profile_img_url:userName,publish_date: DateTime.now(),caption: postCaption,comments: [],likers: [] );
+      post newPost=post(post_img_url:"${userName}/${postNo}",publish_date: DateTime.now(),caption: postCaption,comments: [],likers: [] );
       final reference = await FirebaseStorage.instance.ref().child("${userName}/${postNo}");
-      final uploadTask = reference.putFile(File_image);
-      await _firestore
+      final uploadTask = reference.putFile(File_image!);
+     String postId = await _firestore.collection('posts').doc().id;
+      var result=await _firestore
           .collection("posts")
-          .doc()
+          .doc(postId)
           .set(newPost.toDocument());
-
+return postId;
     }
     catch(e){
       throw Exception(e.toString());

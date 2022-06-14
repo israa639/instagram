@@ -8,6 +8,7 @@ import 'package:untitled/bloc/auth/auth_bloc.dart';
 import '../../bloc/bottom_nav_bar/bottom_nav_bar_bloc.dart';
 import '../../bloc/user_profile_image/profile_image_bloc.dart';
 import '../../data/repository/auth_repository.dart';
+import '../widgets/post_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
 
@@ -23,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
  @override
   Widget build(BuildContext context) {
     final _bottom_nav_Bloc=BlocProvider.of<BottomNavBarBloc>(context);
-    final posts_number=  _bottom_nav_Bloc.authRepository.current_user.posts==null?0: _bottom_nav_Bloc.authRepository.current_user.posts?.length;
+    final posts_number=  _bottom_nav_Bloc.authRepository.current_user.posts_id==null?0: _bottom_nav_Bloc.authRepository.current_user.posts_id?.length;
     final followers_number=  _bottom_nav_Bloc.authRepository.current_user.followers_id==null?0:_bottom_nav_Bloc.authRepository.current_user.followers_id?.length;
     final following_number=  _bottom_nav_Bloc.authRepository.current_user.following_id==null?0: _bottom_nav_Bloc.authRepository.current_user.following_id?.length;
     final _profileImg_bloc= BlocProvider.of<ProfileImageBloc>(context);
@@ -159,7 +160,7 @@ Row(
               onPressed:() {
               }),
 
-          Text('followers',style: TextStyle(fontSize: 19),),
+          Text("Followers",style: TextStyle(fontSize: 19),),
 
         ],
       ),
@@ -199,9 +200,68 @@ Row(
 
         },),
 ]),
-          ]
-
+          Divider(
+              color: Colors.grey
           ),
+Expanded(child:
+    GridView.count(
+   crossAxisCount: 3,
+   padding: EdgeInsets.all(4.0),
+   childAspectRatio: 8.0 / 9.0,
+   children:  new List<Widget>.generate(posts_number!, (index) {
+   return Custom_post_widget(_bottom_nav_Bloc.authRepository.current_user.posts![index]);
+   }
+   )
+   /*ListView.builder(
+   itemCount: posts_number,
+
+   itemBuilder: ( context, int index){
+     if (index>0)
+       {
+         setState(()=>index+=2);
+       }
+   return Container(
+
+   child: Row(
+   children: [
+     postWidget(index , _bottom_nav_Bloc ,posts_number),
+     postWidget(index+1 , _bottom_nav_Bloc ,posts_number),
+     postWidget(index+2 , _bottom_nav_Bloc ,posts_number),
+
+   //  Custom_post_widget(_bottom_nav_Bloc.authRepository.current_user.posts![index+2]),
+
+]));}
+
+   ),*/),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        )
+
+         ] ),
           //SizedBox(width: 100,),
 
 
@@ -214,5 +274,12 @@ Row(
       BlocProvider.of<ProfileImageBloc>(context).add(RequestUpdateProfileImageEvent(File(file!.path)));
 
     }
+  }
+  Widget postWidget(int index ,var _bottom_nav_Bloc ,int? size)
+  {
+    if(index<size!)
+    return Custom_post_widget(_bottom_nav_Bloc.authRepository.current_user.posts![index]);
+    else
+      return Container();
   }
 }

@@ -2,67 +2,51 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../bloc/post_bloc/post_bloc.dart';
+class addPostScreen extends StatefulWidget {
 
-class addPostScreen extends StatelessWidget {
-   File post_image;
 
-  final captionController = TextEditingController();
-  addPostScreen(this.post_image);
+  @override
+  State<addPostScreen> createState() => _addPostScreenState();
+}
+
+class _addPostScreenState extends State<addPostScreen> {
+  // File post_image;
+    File? imageFile;
+    String postCaption='';
+    var captionController= TextEditingController() ;
+ // addPostScreen(this.post_image);
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     captionController.dispose();
+    super.dispose();
 
   }
+   void getImage({required ImageSource source}) async {
+      await ImagePicker().pickImage(source: source).then((file) => setState(() => imageFile = File(file!.path)));
+
+     /* if(file?.path!=null){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) =>addPostScreen(imageFile)),
+      );
+    }*/
+
+   }
   @override
   Widget build(BuildContext context) {
     final _post_Bloc=BlocProvider.of<PostBloc>(context);
     return Scaffold(
-      backgroundColor: Colors.white70,
-      body: BlocBuilder<PostBloc, PostState>(
-        bloc: _post_Bloc,
-        builder: (BuildContext context, PostState state) {
-      if (state is ImageSelected){
-     return Column(children:[
-        SizedBox(height: 30,),
-        Container(
-          alignment: Alignment.topRight,
-          child:
-        IconButton(
-        color: Colors.blue,
-            icon: Icon(Icons.check)
-          ,
-            onPressed: () {
-              _post_Bloc.add(addPostEvent(captionController.text, post_image));
-            },),),
-      Row(
-        children: [
-          Container(
-            child:CircleAvatar(radius:60,
-                backgroundColor: Colors.grey.shade400,
 
-                backgroundImage :FileImage( post_image))
-          ),
-         Expanded(child:
-          TextField(
-         controller:captionController,
-            decoration:InputDecoration(fillColor:Colors.blueGrey.shade50,filled: false,hintText: "Write a caption..",
-
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(2)) ,
-
-
-          )))
-        ],
-      ),]
-      );}
-      if (state is Loading) {
-        return Center(child: CircularProgressIndicator());
-      }
-      if (state is PostAddedSuccessfully){
+      body: BlocConsumer<PostBloc, PostState>(
+   listener: (context, state)
+    {
+      if (state is PostAddedSuccessfully) {
         //Navigator.pop(context);
 
-             /* return AlertDialog(
+        /* return AlertDialog(
                 // contentPadding:  EdgeInsets.fromLTRB(50.0, 70.0, 24.0, 24.0),
                   content: Column(
 
@@ -72,27 +56,84 @@ class addPostScreen extends StatelessWidget {
 
                       ])
               );*/
+
+
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("post added successfully")));
+        _post_Bloc.add(postAddedFinished());
 
 
-
-
+        // _post_Bloc.add( postAddedFinished());
 
 
       }
-      if (state is PostAddedFailed){
+
+      if (state is PostAddedFailed) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(state.error)));
-
       }
-      return Container( child:Text("issss"));
+    },
+
+   builder: (context, state) {
+    if (state is Loading) {
+    return const Center(child: CircularProgressIndicator());
+    }
+    if (state is NoImageSelected) {
+      getImage(source: ImageSource.camera,);
+      if (imageFile != null) {
+        _post_Bloc.add(selectImageEvent());
+      }
+    }
+
+    if (state is ImageSelected){
+         return Column(children:[
+    SizedBox(height: 30,),
+    Container(
+    alignment: Alignment.topRight,
+    child:
+    IconButton(
+    color: Colors.blue,
+    icon: Icon(Icons.check)
+    ,
+    onPressed: () {
+    _post_Bloc.add(addPostEvent(captionController.text, imageFile));
+    },),),
+    Row(
+    children: [
+    Container(
+    child:CircleAvatar(radius:60,
+    backgroundColor: Colors.grey.shade400,
+
+    backgroundImage :FileImage( imageFile!))
+    ),
+    Expanded(child:
+    TextField(
+    controller:captionController,
+    onChanged: (caption) {
+      setState(() =>postCaption= caption);
+
+    },
+    decoration:InputDecoration(fillColor:Colors.blueGrey.shade50,hintText: "Write a caption..",
+
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(2)) ,
+
+
+    )))
+    ],
+    ),]
+    );}
+    return Container();
+
+    },
+    ), );
 
 
 
-      })
 
-    );
 
-  }
-}
+
+
+
+
+
+}}

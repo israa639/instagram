@@ -8,6 +8,11 @@ class Loading extends PostState {
   @override
   List<Object> get props => [];
 }
+class NoImageSelected extends PostState {
+
+  @override
+  List<Object> get props => [];
+}
 class ImageSelected extends PostState {
 
   @override
@@ -15,7 +20,7 @@ class ImageSelected extends PostState {
 }
 class PostAddedSuccessfully extends PostState {
   String postCaption;
-  final File profile_img;
+   File? profile_img;
 
 
   PostAddedSuccessfully(this.postCaption,this.profile_img);

@@ -3,45 +3,34 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:untitled/data/models/user.dart';
 
+import '../models/post.dart';
+
 class UserRepository{
   final _firestore=FirebaseFirestore.instance;
-  late   user   current_user;
- // UserRepository(this.current_user);
-  //function to check if the username is unique or not
+ // late   user   current_user;
 
-  Future<void> createUser()async
+Future<List<post>>  getUserPosts(List<String> postsId)  async {
+  List<post> posts=[];
+  var documentSnapshot;
+  for(int i=0;i<postsId.length;i++)
   {
-    try{
-
-      await _firestore
-          .collection("user")
-          .doc(this.current_user.userId)
-          .set(this.current_user.toDocument());
-      await _firestore
-          .collection("username")
-          .doc(this.current_user.username)
-          .set({"user_name":this.current_user.username});
-
+    try {
+      documentSnapshot =
+      await _firestore.collection('posts').doc(postsId[i]).get();
+      posts.add(post.fromSnapshot(documentSnapshot));
     }
-    catch(e){
-      throw Exception(e.toString());
+    catch(e)
+    {
+      throw Exception('no user found');
     }
 
   }
-Future<void> getUser(String userId)async
-{
-  DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-      await _firestore.collection('user').doc(userId ?? '').get();
+
+  return posts;
 
 
-  if (documentSnapshot.exists) {
-
-    this.current_user= user.fromSnapshot(documentSnapshot);
-  }
-  else{
-    throw Exception('user-not-found');
-  }
 }
+
   Future<List<user>> getUsersByUserName(String userName)async
   {
     try{

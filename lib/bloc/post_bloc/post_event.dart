@@ -6,10 +6,14 @@ abstract class PostEvent extends Equatable {
 }
 class addPostEvent extends PostEvent {
   String caption;
-  final File File_image;
+  File? File_image;
 
 
   addPostEvent(this.caption,this.File_image);
+}
+class selectImageEvent extends PostEvent {
+  @override
+  List<Object> get props => [];
 }
 class postAddedFinished extends PostEvent {
   @override

@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class post{
- final String profile_img_url;
-  String? profile_img_downloaded_url;
+ final String post_img_url;
+  Future<String>? post_img_downloaded_url;
 
- final DateTime publish_date;
+  DateTime? publish_date;
 
   String? caption;
   List<Object>? comments;
@@ -13,16 +13,22 @@ class post{
  String? postId;
 
 
-  post({required this.profile_img_url,this.comments,this.likers,required this.publish_date, this.caption,this.postId});
- Map<String, dynamic> toDocument() {
+  post({required this.post_img_url,this.comments,this.likers, this.publish_date, this.caption,this.postId});
+ void set_post_img_downloaded_url(Future<String> url)
+ {
+  this.post_img_downloaded_url=url;
+ }
+
+
+  Map<String, dynamic> toDocument() {
 
   return {
 
    "caption" : caption,
    "comments":comments,
-   "imgURL":profile_img_url,
+   "imgURL":post_img_url,
    "likers":likers,
-   "publish_date":Timestamp.fromDate(publish_date),
+   "publish_date":Timestamp.fromDate(publish_date!),
 
   };
 
@@ -33,8 +39,8 @@ class post{
    caption: snap["caption"] ,
    comments:snap["comments"]!=null?List<Object>.from(snap["comments"]): [],
    likers: snap["likers"]!=null?List<Object>.from(snap["likers"]):[],
-   profile_img_url: snap["imgURL"]==null?'':snap["imgURL"],
-   publish_date:snap["publish_date"],
+   post_img_url: snap["imgURL"]==null?'':snap["imgURL"],
+  // publish_date:DateTime.fromMillisecondsSinceEpoch(snap["publish_date"]),
 
   );
 

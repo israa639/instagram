@@ -13,21 +13,29 @@ import 'package:untitled/data/models/post.dart';
    String? profile_img_url;
    List<Object>?followers_id;//array to store user followers
    List<Object>?following_id=[];//array to store  followings of user
-   List<Object>? posts_id=[];// array to store posts
-   List<Object>? other_posts_id=[];//array to stores the posts that user was tagged in
+   List<String>? posts_id=[];// array to store posts
+   List<String>? other_posts_id=[];//array to stores the posts that user was tagged in
    String? userId;
    List<post>?posts;
    late final int postNumber;
 
   user({required this.username, this.followers_id, this.following_id, this.profile_img_url, this.posts_id, this.other_posts_id, this.userId,required this.name});
    //user({required this.username,  this.userId,this.name});
-  void set_profile_img_url(String url)
+  void set_profile_img_downloaded_url(Future<String> url)
   {
-    this.profile_img_url=url;
+    this.profile_img_downloaded_url=url;
   }
-   void set_postNumber()
+   void set_posts(List<post>userPosts)
    {
-     this.postNumber=posts!=null?posts!.length:0;
+     this.posts=userPosts;
+   }
+   void set_profile_img_url(String url)
+   {
+     this.profile_img_url=url;
+   }
+   Future<void> set_postNumber()
+   async {
+      this.postNumber=await posts!=null?posts_id!.length:0;
    }
    Map<String, dynamic> toDocument() {
 
@@ -51,8 +59,8 @@ import 'package:untitled/data/models/post.dart';
       followers_id:snap["followers"]!=null?List<Object>.from(snap["followers"]): [],
       following_id: snap["following"]!=null?List<Object>.from(snap["following"]):[],
       profile_img_url: snap["profileURL"]==null?'':snap["profileURL"],
-       posts_id:snap["posts"]!=null?List<Object>.from(snap["posts"]):[],
-      other_posts_id:snap["other_posts"]!=null? List<Object>.from(snap["other_posts"]):[],
+       posts_id:snap["posts"]!=null?List<String>.from(snap["posts"]):[],
+      other_posts_id:snap["other_posts"]!=null? List<String>.from(snap["other_posts"]):[],
 
        userId:snap["userId"],
        name: snap["name"]==null?'':snap["name"],

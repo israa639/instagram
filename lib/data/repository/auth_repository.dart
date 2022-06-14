@@ -131,7 +131,6 @@ class AuthRepository{
 Future<void> updateProfileImg(File File_image) async {
  try {
    final reference = await FirebaseStorage.instance.ref().child("profile_images/${this.current_user.username}");
-   //Upload the file to firebase
    final uploadTask = reference.putFile(File_image);
  }
  catch(e){

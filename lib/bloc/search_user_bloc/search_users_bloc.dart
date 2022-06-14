@@ -16,7 +16,7 @@ class SearchUsersBloc extends Bloc<SearchUsersEvent, SearchUsersState> {
       emit(SearchStateLoading ());
       try{
        final users= await this.userRepository.getUsersByUserName(event.user_name);
-       users.map((user) =>user.profile_img_downloaded_url= this.userRepository.loadImage(user.profile_img_url!));
+       users.map((user) async =>user.set_profile_img_downloaded_url(this.userRepository.loadImage(user.profile_img_url!)));
 
             emit(SearchStateSuccess(users,event.user_name));
 

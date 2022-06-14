@@ -17,6 +17,8 @@ import 'bloc/user_profile_image/profile_image_bloc.dart';
 import 'data/models/user.dart';
 import 'data/repository/auth_repository.dart';
 import 'data/repository/post_repository.dart';
+import 'data/repository/userProfileManagementRepository.dart';
+import 'data/repository/user_actions_repository.dart';
 import 'data/repository/user_repository.dart';
 import 'presentation/router/app_router.dart';
 
@@ -41,14 +43,18 @@ class MyApp extends StatelessWidget {
     create: (context) => UserRepository()),
       RepositoryProvider(
           create: (context) => PostRepository()),
+    RepositoryProvider(
+    create: (context) => UserActivitiesRepository()),
+    RepositoryProvider(
+    create: (context) => UserProfileManagemetRepository()),
     ],
 
       child: MultiBlocProvider(
-        providers: [BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context),user_repository: RepositoryProvider.of<UserRepository>(context) ),),
+        providers: [BlocProvider<AuthBloc>(create: (context) => AuthBloc(userProfileRepo: UserProfileManagemetRepository(),authRepository: RepositoryProvider.of<AuthRepository>(context),user_repository: RepositoryProvider.of<UserRepository>(context) ),),
           BlocProvider<BottomNavBarBloc>(create: (context) => BottomNavBarBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))),
           BlocProvider<SearchUsersBloc>(create: (context) => SearchUsersBloc( userRepository: RepositoryProvider.of<UserRepository>(context))),
           BlocProvider<ProfileImageBloc>(create: (context) =>ProfileImageBloc(authRepository: RepositoryProvider.of<AuthRepository>(context),current_user: RepositoryProvider.of<AuthRepository>(context).current_user)),
-   BlocProvider<PostBloc>(create: (context) => PostBloc(postRepo: RepositoryProvider.of<PostRepository>(context),userName:RepositoryProvider.of<AuthRepository>(context).current_user.username,postNo:RepositoryProvider.of<AuthRepository>(context).current_user.postNumber))
+   BlocProvider<PostBloc>(create: (context) => PostBloc(postRepo: RepositoryProvider.of<PostRepository>(context),currentUser:RepositoryProvider.of<AuthRepository>(context).current_user,postNo:RepositoryProvider.of<AuthRepository>(context).current_user.posts_id==null?0:RepositoryProvider.of<AuthRepository>(context).current_user.posts_id!.length,userActivityRepo:RepositoryProvider.of< UserActivitiesRepository>(context),))
 
 
     ],
