@@ -28,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await authRepository.signIn(
             email: event.email, password: event.password);
 
-        userProfileRepo.setUserProfile(this.authRepository.current_user);
+       await  userProfileRepo.setUserProfile(this.authRepository.current_user);
         current_user=this.authRepository.current_user;
 
         emit(Authenticated());
@@ -44,8 +44,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         await authRepository.signUp(
             email: event.email, password: event.password,username: event.username,name:event.name);
+        await  userProfileRepo.setUserProfile(this.authRepository.current_user);
         current_user=this.authRepository.current_user;
-        current_user.set_postNumber();
+
         emit(Authenticated());
       } catch (e) {
         emit(AuthError(e.toString()));

@@ -45,6 +45,21 @@ return resultedUsers;}
     }
 
   }
+  Future<user> getUsersByUserId(String userId)async
+  {
+    try{
+      final documentSnapshot =
+      await _firestore.collection('user').doc(userId).get();
+      user resultedUser=user.fromSnapshot(documentSnapshot);
+
+      return  resultedUser;
+    }
+    catch(e)
+    {
+      throw Exception('no user found');
+    }
+
+  }
 
 
   Future<String> loadImage(String img_url1)async {

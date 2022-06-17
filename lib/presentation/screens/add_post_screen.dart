@@ -44,27 +44,10 @@ class _addPostScreenState extends State<addPostScreen> {
    listener: (context, state)
     {
       if (state is PostAddedSuccessfully) {
-        //Navigator.pop(context);
-
-        /* return AlertDialog(
-                // contentPadding:  EdgeInsets.fromLTRB(50.0, 70.0, 24.0, 24.0),
-                  content: Column(
-
-                      children: [
-                        Icon(Icons.check, size: 60,),
-                        Text("post added successfully"),
-
-                      ])
-              );*/
-
 
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("post added successfully")));
         _post_Bloc.add(postAddedFinished());
-
-
-        // _post_Bloc.add( postAddedFinished());
-
 
       }
 
@@ -97,6 +80,7 @@ class _addPostScreenState extends State<addPostScreen> {
     ,
     onPressed: () {
     _post_Bloc.add(addPostEvent(captionController.text, imageFile));
+    captionController.clear();
     },),),
     Row(
     children: [

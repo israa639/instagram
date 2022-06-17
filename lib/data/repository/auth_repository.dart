@@ -22,7 +22,7 @@ class AuthRepository{
   }
   Future<void> signUp({required String email, required String password,required String username,required String name}) async {
 
-    if(await checkUserNameexistence(username)==false) {
+    if(await checkUserNameexistence(username).then((bool flag) => flag==false)) {
       try {
 
 

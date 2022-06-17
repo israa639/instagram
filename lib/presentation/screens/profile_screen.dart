@@ -7,26 +7,33 @@ import 'package:image_picker/image_picker.dart';
 import 'package:untitled/bloc/auth/auth_bloc.dart';
 import '../../bloc/bottom_nav_bar/bottom_nav_bar_bloc.dart';
 import '../../bloc/user_profile_image/profile_image_bloc.dart';
+import '../../data/models/user.dart';
 import '../../data/repository/auth_repository.dart';
 import '../widgets/post_widget.dart';
+import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
 
+user CurrentUser;
 
+ProfileScreen(this.CurrentUser);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<ProfileScreen> createState() => _ProfileScreenState(this.CurrentUser);
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
 
+  user CurrentUser;
 
- @override
+  _ProfileScreenState(this.CurrentUser);
+
+  @override
   Widget build(BuildContext context) {
     final _bottom_nav_Bloc=BlocProvider.of<BottomNavBarBloc>(context);
-    final posts_number=  _bottom_nav_Bloc.authRepository.current_user.posts_id==null?0: _bottom_nav_Bloc.authRepository.current_user.posts_id?.length;
-    final followers_number=  _bottom_nav_Bloc.authRepository.current_user.followers_id==null?0:_bottom_nav_Bloc.authRepository.current_user.followers_id?.length;
-    final following_number=  _bottom_nav_Bloc.authRepository.current_user.following_id==null?0: _bottom_nav_Bloc.authRepository.current_user.following_id?.length;
+    final posts_number=  CurrentUser.posts_id==null?0: CurrentUser.posts_id?.length;
+    final followers_number=  CurrentUser.followers_id==null?0:CurrentUser.followers_id?.length;
+    final following_number=  CurrentUser.following_id==null?0: CurrentUser.following_id?.length;
     final _profileImg_bloc= BlocProvider.of<ProfileImageBloc>(context);
 
     return  Scaffold(
@@ -36,14 +43,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 
         appBar: AppBar(
-          leading: IconButton(
+          leading: DropdownButton<Icon>(
+onChanged:(icon) {
+  _bottom_nav_Bloc.authRepository.signOut();
+  Navigator.pushReplacement(context,
+      MaterialPageRoute(builder: (_) =>
+          loginScreen()));
+},
+            icon: const Icon( Icons.settings),
+            elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
+            underline: Container(
+              height: 2,
+              color: Colors.deepPurpleAccent,
+            ),
+            items: <Icon>[ const Icon(Icons.arrow_downward)]
+                .map<DropdownMenuItem<Icon>>((Icon value) {
+              return DropdownMenuItem<Icon>(
+                value: value,
+                child: value,
+              );
+            }).toList(),
+          ),
+
+
+
+
+
+
+
+         /* IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
 
             },
-          ),
+          ),*/
           centerTitle: true,
-          title: Text(_bottom_nav_Bloc.authRepository.current_user.username),
+          title: Text(CurrentUser.username),
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
 
@@ -125,7 +161,7 @@ children:<Widget> [
 SizedBox(width: 20,),
           Container(
   alignment: Alignment.centerLeft,
-  child:Text(_bottom_nav_Bloc.authRepository.current_user.name,style: TextStyle(fontSize: 25),),
+  child:Text(CurrentUser.name,style: TextStyle(fontSize: 25),),
 
 ),],),
           Divider(
@@ -204,67 +240,25 @@ Row(
               color: Colors.grey
           ),
 Expanded(child:
-    GridView.count(
-   crossAxisCount: 3,
-   padding: EdgeInsets.all(4.0),
-   childAspectRatio: 8.0 / 9.0,
-   children:  new List<Widget>.generate(posts_number!, (index) {
-   return Custom_post_widget(_bottom_nav_Bloc.authRepository.current_user.posts![index]);
-   }
-   )
-   /*ListView.builder(
-   itemCount: posts_number,
+    GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 0.2,
+          crossAxisCount: 3,
+        ),
+        itemCount: posts_number!,
+        itemBuilder: (context, index) {
+          return Custom_post_widget(CurrentUser.posts![index],CurrentUser);
+          //
+        },
 
-   itemBuilder: ( context, int index){
-     if (index>0)
-       {
-         setState(()=>index+=2);
-       }
-   return Container(
-
-   child: Row(
-   children: [
-     postWidget(index , _bottom_nav_Bloc ,posts_number),
-     postWidget(index+1 , _bottom_nav_Bloc ,posts_number),
-     postWidget(index+2 , _bottom_nav_Bloc ,posts_number),
-
-   //  Custom_post_widget(_bottom_nav_Bloc.authRepository.current_user.posts![index+2]),
-
-]));}
-
-   ),*/),
+   )),
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        )
 
          ] ),
           //SizedBox(width: 100,),
-
-
 
            );
  }
@@ -275,11 +269,5 @@ Expanded(child:
 
     }
   }
-  Widget postWidget(int index ,var _bottom_nav_Bloc ,int? size)
-  {
-    if(index<size!)
-    return Custom_post_widget(_bottom_nav_Bloc.authRepository.current_user.posts![index]);
-    else
-      return Container();
-  }
+
 }

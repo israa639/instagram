@@ -8,17 +8,20 @@ class post{
   DateTime? publish_date;
 
   String? caption;
-  List<Object>? comments;
- List<Object>? likers;
+  List<String> comments;
+ List<Object>likers;
  String? postId;
 
 
-  post({required this.post_img_url,this.comments,this.likers, this.publish_date, this.caption,this.postId});
+  post({required this.post_img_url,required this.comments,required this.likers, this.publish_date, this.caption,this.postId});
  void set_post_img_downloaded_url(Future<String> url)
  {
   this.post_img_downloaded_url=url;
  }
-
+void set_post_id(String id)
+{
+ this.postId=id;
+}
 
   Map<String, dynamic> toDocument() {
 
@@ -37,7 +40,7 @@ class post{
  factory post.fromSnapshot( DocumentSnapshot<Map<String, dynamic>> snap) {
   return post(
    caption: snap["caption"] ,
-   comments:snap["comments"]!=null?List<Object>.from(snap["comments"]): [],
+   comments:snap["comments"]!=null?List<String>.from(snap["comments"]): [],
    likers: snap["likers"]!=null?List<Object>.from(snap["likers"]):[],
    post_img_url: snap["imgURL"]==null?'':snap["imgURL"],
   // publish_date:DateTime.fromMillisecondsSinceEpoch(snap["publish_date"]),

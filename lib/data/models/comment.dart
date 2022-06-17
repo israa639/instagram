@@ -1,10 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class comment{
 
 
-  String commentId;
+  String? commentId;
   String commentText;
   String userId;
-  final DateTime commentDate;
 
-  comment(this.commentDate,this.commentText,this.commentId,this.userId);
+  comment({required this.commentText,required this.userId});
+  Map<String, dynamic> toDocument() {
+
+    return {
+
+      "commentText" : commentText,
+      "userId":userId,
+
+    };
+
+  }
+
+  factory comment.fromSnapshot( DocumentSnapshot<Map<String, dynamic>> snap) {
+    return comment(
+      commentText: snap["commentText"]! ,
+      userId:snap["userId"]!,
+
+
+    );
+
+  }
+
+
+
 }

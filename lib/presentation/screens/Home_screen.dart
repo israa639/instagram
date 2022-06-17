@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,7 +55,7 @@ class _MyHomeBarState extends State<MyHomeBar> {
               return HomeScreen();
             }
             if (state is ProfilePageLoaded) {
-              return ProfileScreen();
+              return ProfileScreen(bottomNavigationBloc.authRepository.current_user);
             }
             if (state is SearchPageLoaded) {
               return searchScreen();
@@ -77,7 +78,7 @@ class _MyHomeBarState extends State<MyHomeBar> {
                   makeNavigationButton('search', Icons.search),
                   makeNavigationButton('add post', Icons.add_box_outlined),
                   makeNavigationButton(
-                      'favourite', Icons.heart_broken_outlined),
+                      'favourite', EvaIcons.heart),
                   makeNavigationButton('profile', Icons.person),
                 ],
 

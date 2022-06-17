@@ -19,6 +19,7 @@ void setUser(user Current)
     _firestore.collection('user').doc(current_user?.userId).update({'posts': FieldValue.arrayUnion([newPostId])});
 
   }
+
   Future<void> Follow(String friendId)
   async {
 

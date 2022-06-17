@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:untitled/presentation/screens/profile_screen.dart';
 
 import '../../bloc/search_user_bloc/search_users_bloc.dart';
 import '../../data/models/user.dart';
@@ -90,7 +91,7 @@ class _searchScreenState extends State<searchScreen> {
                                           onPressed:() {
                                             Navigator.pushReplacement(context,
                                                 MaterialPageRoute(builder: (_) =>
-                                                    loginScreen()));
+                                                    ProfileScreen(state.search_result[index])));
 
                                           }),
                                       // Text(state.search_result[index].username,),

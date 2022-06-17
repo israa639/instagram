@@ -11,11 +11,13 @@ import 'package:untitled/presentation/screens/search_screen.dart';
 import 'package:untitled/presentation/screens/timeLine_screen.dart';
 import 'bloc/auth/auth_bloc.dart';
 import 'bloc/bottom_nav_bar/bottom_nav_bar_bloc.dart';
+import 'bloc/comment_bloc/comment_bloc.dart';
 import 'bloc/post_bloc/post_bloc.dart';
 import 'bloc/profile_bloc/profile_bloc.dart';
 import 'bloc/user_profile_image/profile_image_bloc.dart';
 import 'data/models/user.dart';
 import 'data/repository/auth_repository.dart';
+import 'data/repository/comment_repository.dart';
 import 'data/repository/post_repository.dart';
 import 'data/repository/userProfileManagementRepository.dart';
 import 'data/repository/user_actions_repository.dart';
@@ -47,15 +49,17 @@ class MyApp extends StatelessWidget {
     create: (context) => UserActivitiesRepository()),
     RepositoryProvider(
     create: (context) => UserProfileManagemetRepository()),
+      RepositoryProvider(
+          create: (context) =>  commentRepository()),
     ],
 
       child: MultiBlocProvider(
         providers: [BlocProvider<AuthBloc>(create: (context) => AuthBloc(userProfileRepo: UserProfileManagemetRepository(),authRepository: RepositoryProvider.of<AuthRepository>(context),user_repository: RepositoryProvider.of<UserRepository>(context) ),),
           BlocProvider<BottomNavBarBloc>(create: (context) => BottomNavBarBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))),
-          BlocProvider<SearchUsersBloc>(create: (context) => SearchUsersBloc( userRepository: RepositoryProvider.of<UserRepository>(context))),
+          BlocProvider<SearchUsersBloc>(create: (context) => SearchUsersBloc( userRepository: RepositoryProvider.of<UserRepository>(context),userProfileRepo: UserProfileManagemetRepository())),
           BlocProvider<ProfileImageBloc>(create: (context) =>ProfileImageBloc(authRepository: RepositoryProvider.of<AuthRepository>(context),current_user: RepositoryProvider.of<AuthRepository>(context).current_user)),
    BlocProvider<PostBloc>(create: (context) => PostBloc(postRepo: RepositoryProvider.of<PostRepository>(context),currentUser:RepositoryProvider.of<AuthRepository>(context).current_user,postNo:RepositoryProvider.of<AuthRepository>(context).current_user.posts_id==null?0:RepositoryProvider.of<AuthRepository>(context).current_user.posts_id!.length,userActivityRepo:RepositoryProvider.of< UserActivitiesRepository>(context),))
-
+         , BlocProvider< CommentBloc>(create: (context) =>CommentBloc(commentRepo: commentRepository(),userProfileRepo: UserProfileManagemetRepository())),
 
     ],
 
