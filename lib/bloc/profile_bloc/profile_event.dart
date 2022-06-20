@@ -3,30 +3,44 @@ abstract class ProfileEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
- class showFollowers extends ProfileEvent{
-  List<dynamic> followers;
-  showFollowers(this.followers);
+
+
+ class RequestshowFollowers extends ProfileEvent{
+  user SearchUser;
+
+  RequestshowFollowers(this.SearchUser);
+
+  @override
+   List<Object> get props => [];
 }
-class showFollowing extends ProfileEvent{
-  List<dynamic> following;
-  showFollowing(this.following);
+class RequestshowFollowing extends ProfileEvent{
+  user SearchUser;
+
+  RequestshowFollowing(this.SearchUser);
+
+  @override
+  List<Object> get props => [];
 }
-class updateProfile extends ProfileEvent{
+class RequestLoadPosts extends ProfileEvent{
+  user SearchUser;
+
+  RequestLoadPosts(this.SearchUser);
 
 }
-class updateProfilePicture extends ProfileEvent{
 
+class RequestFollow extends ProfileEvent{
+  user SearchUser;
+
+  RequestFollow(this.SearchUser);
+
+  @override
+  List<Object> get props => [];
 }
-class addPost extends ProfileEvent{
+class RequestUnfollow extends ProfileEvent{
+  user SearchUser;
 
-}
-class showOtherPosts extends ProfileEvent{
-  List<dynamic> other_posts;
+  RequestUnfollow(this.SearchUser);
 
-  showOtherPosts(this.other_posts);
-}
-class showMyPosts extends ProfileEvent{
-  List<dynamic> my_posts;
-
-  showMyPosts(this.my_posts);
+  @override
+  List<Object> get props => [];
 }

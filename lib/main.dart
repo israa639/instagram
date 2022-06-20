@@ -61,7 +61,9 @@ class MyApp extends StatelessWidget {
    BlocProvider<PostBloc>(create: (context) => PostBloc(postRepo: RepositoryProvider.of<PostRepository>(context),currentUser:RepositoryProvider.of<AuthRepository>(context).current_user,postNo:RepositoryProvider.of<AuthRepository>(context).current_user.posts_id==null?0:RepositoryProvider.of<AuthRepository>(context).current_user.posts_id!.length,userActivityRepo:RepositoryProvider.of< UserActivitiesRepository>(context),))
          , BlocProvider< CommentBloc>(create: (context) =>CommentBloc(commentRepo: commentRepository(),userProfileRepo: UserProfileManagemetRepository())),
 
-    ],
+          BlocProvider< ProfileBloc>(create: (context) =>ProfileBloc( current_user:RepositoryProvider.of<AuthRepository>(context).current_user,userProfileRepo: UserProfileManagemetRepository(),userActivityRepo:RepositoryProvider.of< UserActivitiesRepository>(context) )),
+
+        ],
 
 
         child: MaterialApp(

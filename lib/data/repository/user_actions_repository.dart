@@ -16,16 +16,23 @@ void setUser(user Current)
 }
   Future<void> addPost(String newPostId)
   async {
-    _firestore.collection('user').doc(current_user?.userId).update({'posts': FieldValue.arrayUnion([newPostId])});
+  await  _firestore.collection('user').doc(current_user?.userId).update({'posts': FieldValue.arrayUnion([newPostId])});
 
   }
 
   Future<void> Follow(String friendId)
   async {
+   await _firestore.collection('user').doc(current_user?.userId).update({'following': FieldValue.arrayUnion([friendId])});
+   await _firestore.collection('user').doc(friendId).update({'followers': FieldValue.arrayUnion([current_user?.userId])});
 
   }
 
+  Future<void> UnFollow(String friendId)
+  async {
+    await _firestore.collection('user').doc(current_user?.userId).update({'following': FieldValue.arrayRemove([friendId])});
+    await _firestore.collection('user').doc(friendId).update({'followers': FieldValue.arrayRemove([current_user?.userId])});
 
+  }
 
   Future<String> loadImage(String img_url1)async {
 

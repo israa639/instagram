@@ -30,14 +30,6 @@ class _postScreenState extends State<postScreen> {
 
   }
 
-/*ListView.builder(
-
-        itemCount: (this._poses.length),
-
-        itemBuilder: (contex, index) =>
-            Custom_pose_widget(pose:this._poses[index],selectedIndex:_selectedIndex ,),
-
-      ),*/
   @override
   Widget build(BuildContext context) {
     final _commentBloc=BlocProvider.of<CommentBloc>(context);

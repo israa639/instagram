@@ -3,36 +3,38 @@ part of 'profile_bloc.dart';
 abstract class ProfileState extends Equatable {
   const ProfileState();
 }
-
-class ProfileInitial extends ProfileState {
-  @override
-  List<Object> get props => [];
-}
-class loadingfollowers extends ProfileState {
+class FollowUserSuccessfully extends ProfileState {
 
 
   @override
   List<Object> get props => [];
 }
-class loadedfollowers extends ProfileState {
+
+class loadingFollowers extends ProfileState {
+
+
+  @override
+  List<Object> get props => [];
+}
+class loadedFollowersSuccessfully extends ProfileState {
   List<user>followers;
 
-  loadedfollowers(this.followers);
+  loadedFollowersSuccessfully(this.followers);
   @override
   List<Object> get props => [];
 }
-class failedloadfollowers extends ProfileState {
+class failedLoadFollowers extends ProfileState {
   @override
   List<Object> get props => [];
 }
-class loadingfollowing extends ProfileState {
+class loadingFollowing extends ProfileState {
   @override
   List<Object> get props => [];
 }
-class loadedfollowing extends ProfileState {
+class loadedFollowingSuccessfully extends ProfileState {
   List<user>following;
 
-  loadedfollowing(this.following);
+  loadedFollowingSuccessfully(this.following);
   @override
   List<Object> get props => [];
 }
@@ -40,10 +42,10 @@ class loading_otherPosts extends ProfileState {
   @override
   List<Object> get props => [];
 }
-class loaded_otherPosts extends ProfileState {
+class loaded_otherPostsSuccessfully extends ProfileState {
   List<post>other_posts;
 
-  loaded_otherPosts(this.other_posts);
+  loaded_otherPostsSuccessfully(this.other_posts);
 
   @override
   List<Object> get props => [];
@@ -52,14 +54,15 @@ class loading_Posts extends ProfileState {
   @override
   List<Object> get props => [];
 }
-class loaded_Posts extends ProfileState {
+class loaded_PostsSuccessfully extends ProfileState {
   List<post>Posts;
 
-  loaded_Posts(this.Posts);
+  loaded_PostsSuccessfully(this.Posts);
 
   @override
   List<Object> get props => [];
 }
+
 
 class profileError extends ProfileState {
   final String error;

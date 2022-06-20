@@ -19,7 +19,12 @@ class SearchUsersBloc extends Bloc<SearchUsersEvent, SearchUsersState> {
       emit(SearchStateLoading ());
       try{
        final users= await this.userRepository.getUsersByUserName(event.user_name);
-       users.map(( User) async => User.set_profile_img_downloaded_url(this.userProfileRepo.loadProfileImage(User.profile_img_url!)));
+        for(int i=0;i<users.length;i++)
+         {
+           Future<String> x= this.userProfileRepo.loadProfileImage(users[i].profile_img_url!);
+           users[i].set_profile_img_downloaded_url(x);
+         }
+       //users.map(( User) async => User.set_profile_img_downloaded_url(this.userProfileRepo.loadProfileImage(User.profile_img_url!)));
 
             emit(SearchStateSuccess(users,event.user_name));
 
@@ -30,6 +35,10 @@ catch(e)
         emit(SearchStateError(e.toString()));
       }
     });
+    on<searchFinished>((event, emit)async {
+        emit(SearchStateEmpty());
+      }
+    );
     @override
     void onTransition(Transition<SearchUsersEvent, SearchUsersState> transition) {
       print(transition);

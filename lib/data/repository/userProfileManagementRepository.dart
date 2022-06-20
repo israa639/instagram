@@ -12,6 +12,7 @@ class UserProfileManagemetRepository{
   // late   user   current_user;
 Future<void> setUserProfile(user currentUser)
 async {
+
   await this.getUserPosts(currentUser.posts_id!).then((List<post> posts) => currentUser.set_posts(posts) );
 
 }
@@ -36,7 +37,7 @@ async {
       }
       catch(e)
       {
-        throw Exception('no user found');
+        throw Exception(e.toString());
       }
 
     }

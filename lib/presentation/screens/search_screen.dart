@@ -3,13 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/presentation/screens/profile_screen.dart';
+import 'package:untitled/presentation/screens/searchResult_screen.dart';
 
+import '../../bloc/profile_bloc/profile_bloc.dart';
 import '../../bloc/search_user_bloc/search_users_bloc.dart';
 import '../../data/models/user.dart';
 import 'login_screen.dart';
 
 class searchScreen extends StatefulWidget {
-  String title='instagram';
 
 
   @override
@@ -30,6 +31,7 @@ class _searchScreenState extends State<searchScreen> {
 }*/
   @override
   Widget build(BuildContext context) {
+    final _ProfileBloc=BlocProvider.of<ProfileBloc>(context);
     final _searchResultBloc=BlocProvider.of<SearchUsersBloc>(context);
     return Scaffold(
 
@@ -89,9 +91,12 @@ class _searchScreenState extends State<searchScreen> {
                                       TextButton(
                                           child:Text(state.search_result[index].username),
                                           onPressed:() {
-                                            Navigator.pushReplacement(context,
+                                            _ProfileBloc.add(RequestLoadPosts(state.search_result[index]));
+
+                                            Navigator.push(context,
                                                 MaterialPageRoute(builder: (_) =>
-                                                    ProfileScreen(state.search_result[index])));
+                                                    SearchProfileScreen(state.search_result[index],_ProfileBloc)));
+                                            _searchResultBloc.add(searchFinished());
 
                                           }),
                                       // Text(state.search_result[index].username,),
@@ -102,11 +107,11 @@ class _searchScreenState extends State<searchScreen> {
                                 );}
                               ,));
 
+
                       }
                       else{
 
                         return Container(
-                          child:Text('no user found'),
                         );
 
                       }

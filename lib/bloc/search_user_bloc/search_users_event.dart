@@ -4,6 +4,12 @@ abstract class SearchUsersEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+class searchFinished extends SearchUsersEvent {
+
+
+  @override
+  String toString() => "searchEnded ";
+}
 class TextChanged extends SearchUsersEvent {
   final String user_name;
 

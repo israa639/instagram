@@ -9,33 +9,12 @@ class UserRepository{
   final _firestore=FirebaseFirestore.instance;
  // late   user   current_user;
 
-Future<List<post>>  getUserPosts(List<String> postsId)  async {
-  List<post> posts=[];
-  var documentSnapshot;
-  for(int i=0;i<postsId.length;i++)
-  {
-    try {
-      documentSnapshot =
-      await _firestore.collection('posts').doc(postsId[i]).get();
-      posts.add(post.fromSnapshot(documentSnapshot));
-    }
-    catch(e)
-    {
-      throw Exception('no user found');
-    }
-
-  }
-
-  return posts;
-
-
-}
 
   Future<List<user>> getUsersByUserName(String userName)async
   {
     try{
     final documentSnapshot =
-    await _firestore.collection('user').where('username',isGreaterThanOrEqualTo:userName).get();
+    await _firestore.collection('user').where('username',isLessThanOrEqualTo:userName).get();
        List<user>resultedUsers=documentSnapshot.docs.map((doc)=>user.fromSnapshot(doc)).toList();
 
 return resultedUsers;}
